@@ -1,0 +1,11 @@
+L0,L0 alt_name,L0 KV:XX,L0 L10n:XX,L1,L1 alt_name,L1 KV:XX,L1 L10n:XX,L2,L2 alt_name,L2 KV:XX,L2 L10n:XX,L3,L3 alt_name,L3 KV:XX,L3 L10n:XX,L4,L4 alt_name,L4 KV:XX,L4 L10n:XX,L5,L5 alt_name,L5 KV:XX,L5 L10n:XX,Name,KV:XX,L10n:XX,Lat,Lon,WKT,Elevation,Start Date,End Date,Comments
+United States,USA,US,,New York,NY,NY,,New York County,Manhattan,NYC,,New York City,NYC,NYC,,Upper East Side,,,,,,,Mount Sinai Hospital COVID Ward,,,40.7831,-73.9712,,15,2020-03-01,,"COVID-19 dedicated ward"
+United States,USA,US,,New York,NY,NY,,New York County,Manhattan,NYC,,New York City,NYC,NYC,,Midtown,,,,,,,Central Park Testing Site,,,40.7794,-73.9632,,42,2020-03-15,,"Drive-through testing facility"
+United States,USA,US,,California,CA,CA,,Los Angeles County,LA County,LAC,,Los Angeles,LA,LA,,Hollywood,,,,,,,Hollywood Presbyterian Medical Center,,,34.0995,-118.3093,,150,2020-03-01,,"COVID-19 treatment center"
+United States,USA,US,,California,CA,CA,,Los Angeles County,LA County,LAC,,Los Angeles,LA,LA,,Venice,,,,,,,Venice Beach Vaccination Site,,,33.9850,-118.4695,,5,2020-12-15,,"Beach-side vaccination center"
+United States,USA,US,,Texas,TX,TX,,Harris County,Harris,HAR,,Houston,HTX,HTX,,Texas Medical Center,,,,,,,MD Anderson COVID Research Lab,,,29.7078,-95.3972,,12,2020-02-01,,"Research laboratory for COVID-19"
+United States,USA,US,,Illinois,IL,IL,,Cook County,Cook,COO,,Chicago,CHI,CHI,,Loop,,,,,,,Navy Pier Mass Testing Site,,,41.8917,-87.6086,,178,2020-04-01,2021-12-31,"Temporary mass testing facility"
+United States,USA,US,,Florida,FL,FL,,Miami-Dade County,Miami-Dade,MIA,,Miami,MIA,MIA,,South Beach,,,,,,,Miami Beach Convention Center Vaccination,,,25.7907,-80.1300,,3,2021-01-01,,"Convention center converted to vaccination site"
+United States,USA,US,,Washington,WA,WA,,King County,King,KIN,,Seattle,SEA,SEA,,Capitol Hill,,,,,,,Swedish Medical Center COVID ICU,,,47.6205,-122.3204,,56,2020-02-15,,"Intensive care unit for COVID patients"
+United States,USA,US,,Georgia,GA,GA,,Fulton County,Fulton,FUL,,Atlanta,ATL,ATL,,Downtown,,,,,,,Grady Hospital COVID Emergency,,,33.7490,-84.3880,,320,2020-03-01,,"Emergency department for COVID cases"
+United States,USA,US,,Massachusetts,MA,MA,,Suffolk County,Suffolk,SUF,,Boston,BOS,BOS,,Back Bay,,,,,,,Massachusetts General Hospital COVID Unit,,,42.3601,-71.0589,,43,2020-02-25,,"Specialized COVID treatment unit"

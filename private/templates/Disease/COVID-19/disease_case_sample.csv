@@ -1,0 +1,11 @@
+Person First Name,Person Last Name,Person Date of Birth,Person Gender,Disease,Case Number,Illness Status,Symptom Debut,Diagnosis Status,Diagnosis Date,Monitoring Level,Location,Comments
+John,Smith,1985-03-15,Male,Coronavirus Disease,COV-2024-001,SYMPTOMATIC,2024-01-15,CONFIRMED-POS,2024-01-17,OBSERVATION,New York City,Patient recovering at home
+Maria,Garcia,1978-09-22,Female,Coronavirus Disease,COV-2024-002,RECOVERED,2024-01-10,CONFIRMED-POS,2024-01-12,NONE,Los Angeles,Fully recovered after 10 days
+David,Johnson,1990-11-08,Male,Coronavirus Disease,COV-2024-003,ASYMPTOMATIC,2024-01-18,CONFIRMED-POS,2024-01-20,OBSERVATION,Chicago,Asymptomatic case through contact tracing
+Sarah,Williams,1995-07-03,Female,Coronavirus Disease,COV-2024-004,SEVERE,2024-01-12,CONFIRMED-POS,2024-01-14,QUARANTINE,Houston,Hospitalized with severe symptoms
+Michael,Brown,1982-12-30,Male,Coronavirus Disease,COV-2024-005,SYMPTOMATIC,2024-01-16,PROBABLE,2024-01-18,DIAGNOSTICS,Phoenix,Awaiting test confirmation
+Lisa,Davis,1975-04-12,Female,Coronavirus Disease,COV-2024-006,RECOVERED,2024-01-08,CONFIRMED-POS,2024-01-10,NONE,Philadelphia,Healthcare worker - fully recovered
+Robert,Miller,1988-08-25,Male,Coronavirus Disease,COV-2024-007,SYMPTOMATIC,2024-01-19,CONFIRMED-POS,2024-01-21,OBSERVATION,San Antonio,Mild symptoms - home isolation
+Jennifer,Wilson,1992-01-17,Female,Coronavirus Disease,COV-2024-008,ASYMPTOMATIC,2024-01-14,CONFIRMED-POS,2024-01-16,OBSERVATION,San Diego,Close contact of confirmed case
+Christopher,Moore,1980-10-05,Male,Coronavirus Disease,COV-2024-009,SEVERE,2024-01-11,CONFIRMED-POS,2024-01-13,QUARANTINE,Dallas,ICU patient - improving condition
+Amanda,Taylor,1993-06-28,Female,Coronavirus Disease,COV-2024-010,SYMPTOMATIC,2024-01-17,CONFIRMED-POS,2024-01-19,OBSERVATION,San Jose,Teacher - contact traced students

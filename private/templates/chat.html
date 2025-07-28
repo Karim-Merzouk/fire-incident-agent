@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌲🔥 Forest Fire AI Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d1810 100%);
+            color: #ffffff;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(90deg, #c41e3a 0%, #ff6b35 100%);
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 20px rgba(196, 30, 58, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 80px);
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .message {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            border-radius: 15px;
+            max-width: 80%;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.user {
+            background: linear-gradient(135deg, #ff6b35 0%, #c41e3a 100%);
+            margin-left: auto;
+            text-align: right;
+        }
+
+        .message.assistant {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .message.system {
+            background: rgba(0, 170, 0, 0.2);
+            border: 1px solid rgba(0, 170, 0, 0.4);
+            text-align: center;
+            margin: 0 auto;
+        }
+
+        .message-content {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        /* Markdown styling for AI responses */
+        .message-content h1, .message-content h2, .message-content h3 {
+            color: #ff6b35;
+            margin: 0.5rem 0;
+            font-weight: bold;
+        }
+
+        .message-content h1 {
+            font-size: 1.5rem;
+            border-bottom: 2px solid #ff6b35;
+            padding-bottom: 0.3rem;
+        }
+
+        .message-content h2 {
+            font-size: 1.3rem;
+            border-bottom: 1px solid #ff6b35;
+            padding-bottom: 0.2rem;
+        }
+
+        .message-content h3 {
+            font-size: 1.1rem;
+        }
+
+        .message-content strong {
+            color: #ffaa44;
+            font-weight: bold;
+        }
+
+        .message-content em {
+            color: #ff9966;
+            font-style: italic;
+        }
+
+        .message-content code {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #66ff66;
+        }
+
+        .message-content ul, .message-content ol {
+            margin: 0.5rem 0;
+            padding-left: 1.5rem;
+        }
+
+        .message-content li {
+            margin: 0.3rem 0;
+            color: #ffffff;
+        }
+
+        .message-content ol li {
+            list-style-type: decimal;
+        }
+
+        .message-content ul li {
+            list-style-type: disc;
+        }
+
+        .message-content pre {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 0.5rem 0;
+            overflow-x: auto;
+        }
+
+        .message-content pre code {
+            background: none;
+            padding: 0;
+        }
+
+        .message-content p {
+            margin: 0.5rem 0;
+            line-height: 1.4;
+        }
+
+        .message-time {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            margin-top: 0.5rem;
+        }
+
+        .input-container {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .message-input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            padding: 1rem 1.5rem;
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .message-input:focus {
+            border-color: #ff6b35;
+            box-shadow: 0 0 0 2px rgba(255, 107, 53, 0.2);
+        }
+
+        .message-input::placeholder {
+            color: #aaaaaa;
+        }
+
+        .send-btn {
+            background: linear-gradient(45deg, #ff6b35 0%, #c41e3a 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 120px;
+        }
+
+        .send-btn:hover:not(:disabled) {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(255, 107, 53, 0.4);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .quick-queries {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .quick-query {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quick-query:hover {
+            background: rgba(255, 107, 53, 0.3);
+            border-color: #ff6b35;
+            transform: scale(1.05);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 1rem;
+            color: #ff6b35;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .typing-indicator {
+            display: none;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            margin-bottom: 1rem;
+            max-width: 80%;
+        }
+
+        .typing-indicator.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .typing-dots {
+            display: inline-block;
+        }
+
+        .typing-dots span {
+            animation: typing 1.4s infinite;
+            opacity: 0.4;
+        }
+
+        .typing-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% {
+                opacity: 0.4;
+            }
+            30% {
+                opacity: 1;
+            }
+        }
+
+        .error-message {
+            background: rgba(255, 68, 68, 0.2);
+            border: 1px solid rgba(255, 68, 68, 0.4);
+            color: #ff4444;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        /* Scrollbar styling */
+        .chat-messages::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: rgba(255, 107, 53, 0.6);
+            border-radius: 4px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 107, 53, 0.8);
+        }
+
+        @media (max-width: 768px) {
+            .chat-container {
+                padding: 0.5rem;
+            }
+            
+            .header {
+                padding: 1rem;
+            }
+            
+            .header h1 {
+                font-size: 1.2rem;
+            }
+            
+            .quick-queries {
+                justify-content: center;
+            }
+            
+            .message {
+                max-width: 95%;
+            }
+            
+            .input-container {
+                flex-direction: column;
+            }
+            
+            .send-btn {
+                align-self: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🌲🔥 Forest Fire AI Emergency Assistant</h1>
+        <a href="/" class="back-btn">← Dashboard</a>
+    </div>
+
+    <div class="chat-container">
+        <div class="quick-queries">
+            <div class="quick-query" onclick="sendQuickQuery('What is the current fire situation?')">
+                🔥 Fire Status
+            </div>
+            <div class="quick-query" onclick="sendQuickQuery('Show me evacuation status')">
+                🏠 Evacuations
+            </div>
+            <div class="quick-query" onclick="sendQuickQuery('How many people are affected?')">
+                👥 Affected People
+            </div>
+            <div class="quick-query" onclick="sendQuickQuery('What resources are deployed?')">
+                👨‍🚒 Resources
+            </div>
+            <div class="quick-query" onclick="sendQuickQuery('Give me a complete overview')">
+                📊 Full Report
+            </div>
+        </div>
+
+        <div class="chat-messages" id="chatMessages">
+            <div class="message system">
+                <div class="message-content">🌲🔥 Forest Fire Emergency AI Assistant Ready</div>
+                <div class="message-content">Ask me about fire status, evacuations, casualties, resources, or any emergency information.</div>
+                <div class="message-time" id="systemTime"></div>
+            </div>
+        </div>
+
+        <div class="typing-indicator" id="typingIndicator">
+            <div class="message-content">
+                🤖 AI Assistant is typing
+                <span class="typing-dots">
+                    <span>.</span>
+                    <span>.</span>
+                    <span>.</span>
+                </span>
+            </div>
+        </div>
+
+        <div class="input-container">
+            <input type="text" 
+                   class="message-input" 
+                   id="messageInput" 
+                   placeholder="Ask about fire status, evacuations, casualties, resources..."
+                   onkeypress="handleKeyPress(event)">
+            <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+                Send 🚀
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let messageHistory = [];
+
+        function formatTime() {
+            return new Date().toLocaleTimeString();
+        }
+
+        function scrollToBottom() {
+            const chatMessages = document.getElementById('chatMessages');
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function parseMarkdown(text) {
+            // Enhanced markdown parser for emergency responses
+            return text
+                // Headers (ensure they're on their own lines)
+                .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+                .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+                .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+                // Bold text
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                // Italic text (but not if already bold)
+                .replace(/(?<!\*)\*([^*]+?)\*(?!\*)/g, '<em>$1</em>')
+                // Code blocks and inline code
+                .replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>')
+                .replace(/`(.*?)`/g, '<code>$1</code>')
+                // Bullet points - improved handling
+                .replace(/^\* (.*)$/gim, '<li>$1</li>')
+                .replace(/^- (.*)$/gim, '<li>$1</li>')
+                // Wrap consecutive list items in ul tags
+                .replace(/(<li>.*<\/li>(?:\s*<li>.*<\/li>)*)/gs, '<ul>$1</ul>')
+                // Numbered lists
+                .replace(/^\d+\. (.*)$/gim, '<ol-item>$1</ol-item>')
+                .replace(/(<ol-item>.*<\/ol-item>(?:\s*<ol-item>.*<\/ol-item>)*)/gs, function(match) {
+                    return '<ol>' + match.replace(/<ol-item>/g, '<li>').replace(/<\/ol-item>/g, '</li>') + '</ol>';
+                })
+                // Line breaks (preserve paragraph structure)
+                .replace(/\n\n/g, '</p><p>')
+                .replace(/\n/g, '<br>')
+                // Wrap in paragraph tags if not already wrapped
+                .replace(/^(?!<[h|u|o|p])/gm, '<p>')
+                .replace(/(?<![>])$/gm, '</p>')
+                // Clean up empty paragraphs
+                .replace(/<p><\/p>/g, '')
+                .replace(/<p>(<[h|u|o])/g, '$1')
+                .replace(/(<\/[h|u|o]>)<\/p>/g, '$1');
+        }
+
+        function addMessage(content, type = 'assistant', time = null) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            
+            const timeStr = time || formatTime();
+            // Parse markdown for assistant messages
+            const formattedContent = type === 'assistant' ? parseMarkdown(content) : content;
+            
+            messageDiv.innerHTML = `
+                <div class="message-content">${formattedContent}</div>
+                <div class="message-time">${timeStr}</div>
+            `;
+            
+            chatMessages.appendChild(messageDiv);
+            scrollToBottom();
+            
+            // Store in history
+            messageHistory.push({
+                content: content,
+                type: type,
+                time: timeStr
+            });
+        }
+
+        function showTyping() {
+            document.getElementById('typingIndicator').classList.add('show');
+            scrollToBottom();
+        }
+
+        function hideTyping() {
+            document.getElementById('typingIndicator').classList.remove('show');
+        }
+
+        function sendQuickQuery(query) {
+            document.getElementById('messageInput').value = query;
+            sendMessage();
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const sendBtn = document.getElementById('sendBtn');
+            const query = input.value.trim();
+            
+            if (!query) return;
+            
+            // Add user message
+            addMessage(query, 'user');
+            
+            // Clear input and disable send button
+            input.value = '';
+            sendBtn.disabled = true;
+            sendBtn.textContent = 'Sending...';
+            
+            // Show typing indicator
+            showTyping();
+            
+            try {
+                const response = await fetch('/api/query', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ query: query })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                // Hide typing indicator
+                hideTyping();
+                
+                if (data.error) {
+                    addMessage(`❌ Error: ${data.error}`, 'assistant');
+                } else {
+                    // Format the response with proper line breaks
+                    const formattedResponse = data.response.replace(/\n/g, '\n');
+                    addMessage(formattedResponse, 'assistant');
+                }
+                
+            } catch (error) {
+                hideTyping();
+                console.error('Error:', error);
+                addMessage(`❌ Connection Error: ${error.message}\n\nPlease check your connection and try again.`, 'assistant');
+            } finally {
+                // Re-enable send button
+                sendBtn.disabled = false;
+                sendBtn.textContent = 'Send 🚀';
+                input.focus();
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('systemTime').textContent = formatTime();
+            document.getElementById('messageInput').focus();
+            
+            // Add some sample interactions to show capabilities
+            setTimeout(() => {
+                addMessage("👋 Welcome to the Forest Fire Emergency AI Assistant!\n\n🔥 I can help you with:\n• Current fire status and containment\n• Evacuation zones and affected people\n• Resource deployment and personnel\n• Casualty reports and emergency shelters\n• Complete situation overviews\n\nTry asking: 'What's the current fire situation?' or click one of the quick query buttons above.", 'assistant');
+            }, 1000);
+        });
+
+        // Auto-focus input when typing
+        document.addEventListener('keydown', function(event) {
+            if (event.target === document.body && event.key.length === 1) {
+                document.getElementById('messageInput').focus();
+            }
+        });
+    </script>
+</body>
+</html>

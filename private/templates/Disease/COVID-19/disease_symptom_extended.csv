@@ -1,0 +1,21 @@
+Disease,Name,Description,Assessment
+Coronavirus Disease,Fever,Fever (greater than 38.6°C or 101.5°F),Temperature measurement
+Coronavirus Disease,Dry Cough,"Unproductive (dry) cough, continuous",Clinical observation
+Coronavirus Disease,Tiredness / Weakness,Unexplained severe tiredness and/or sudden weakness,Patient self-report
+Coronavirus Disease,Dyspnoea,"Shortness of breath, difficulty breathing",Clinical assessment
+Coronavirus Disease,Myalgia / Arthralgia,Muscle and/or joint pain,Patient self-report
+Coronavirus Disease,Sore throat,,Clinical examination
+Coronavirus Disease,Rhinitis,"Nasal congestion, runny nose",Clinical observation
+Coronavirus Disease,Diarrhea,,Patient self-report
+Coronavirus Disease,Loss of taste,Ageusia - complete loss of taste,Patient self-report
+Coronavirus Disease,Loss of smell,Anosmia - complete loss of smell,Patient self-report
+Coronavirus Disease,Headache,Persistent headache,Patient self-report
+Coronavirus Disease,Nausea,Feeling sick to stomach,Patient self-report
+Coronavirus Disease,Vomiting,Throwing up,Clinical observation
+Coronavirus Disease,Chills,Feeling cold with shivering,Patient self-report
+Coronavirus Disease,Conjunctivitis,Pink eye inflammation,Clinical examination
+Coronavirus Disease,Skin rash,Rash on skin or discoloration of fingers/toes,Clinical examination
+Coronavirus Disease,Night sweats,Excessive sweating during sleep,Patient self-report
+Coronavirus Disease,Brain fog,Difficulty concentrating or thinking clearly,Patient self-report
+Coronavirus Disease,Chest pain,Pain or pressure in chest,Patient self-report
+Coronavirus Disease,Fast heart rate,Rapid heartbeat or palpitations,Clinical measurement

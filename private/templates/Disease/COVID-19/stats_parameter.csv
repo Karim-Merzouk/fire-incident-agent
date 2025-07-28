@@ -1,0 +1,14 @@
+Parameter,Comments
+COVID-19 Cases,Total confirmed COVID-19 cases
+COVID-19 Deaths,Total COVID-19 related deaths
+COVID-19 Recovered,Total recovered COVID-19 cases
+COVID-19 Hospitalized,Total hospitalized COVID-19 cases
+COVID-19 ICU,Total COVID-19 cases in ICU
+COVID-19 Tests Positive,Total positive COVID-19 tests
+COVID-19 Tests Negative,Total negative COVID-19 tests
+COVID-19 Tests Total,Total COVID-19 tests performed
+COVID-19 Vaccinated First Dose,People who received first vaccine dose
+COVID-19 Vaccinated Second Dose,People who received second vaccine dose
+COVID-19 Vaccinated Booster,People who received booster dose
+COVID-19 Contact Traced,People contact traced
+COVID-19 Quarantined,People in quarantine

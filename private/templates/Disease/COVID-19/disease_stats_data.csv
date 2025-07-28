@@ -1,0 +1,19 @@
+Parameter,Location,Date,Value,Source,Comments
+COVID-19 Cases,New York,2024-01-20,1250,NYC Health Department,Daily confirmed cases
+COVID-19 Deaths,New York,2024-01-20,15,NYC Health Department,Daily deaths
+COVID-19 Recovered,New York,2024-01-20,980,NYC Health Department,Daily recoveries
+COVID-19 Hospitalized,New York,2024-01-20,145,NYC Health Department,Currently hospitalized
+COVID-19 ICU,New York,2024-01-20,32,NYC Health Department,Currently in ICU
+COVID-19 Tests Total,New York,2024-01-20,5600,NYC Health Department,Total tests performed
+COVID-19 Tests Positive,New York,2024-01-20,1250,NYC Health Department,Positive test results
+COVID-19 Tests Negative,New York,2024-01-20,4350,NYC Health Department,Negative test results
+COVID-19 Cases,California,2024-01-20,2890,CA Health Department,Daily confirmed cases
+COVID-19 Deaths,California,2024-01-20,42,CA Health Department,Daily deaths
+COVID-19 Recovered,California,2024-01-20,2234,CA Health Department,Daily recoveries
+COVID-19 Hospitalized,California,2024-01-20,356,CA Health Department,Currently hospitalized
+COVID-19 ICU,California,2024-01-20,89,CA Health Department,Currently in ICU
+COVID-19 Tests Total,California,2024-01-20,12500,CA Health Department,Total tests performed
+COVID-19 Vaccinated First Dose,New York,2024-01-20,45000,NYC Health Department,People with first dose
+COVID-19 Vaccinated Second Dose,New York,2024-01-20,42000,NYC Health Department,People with second dose
+COVID-19 Contact Traced,New York,2024-01-20,3400,NYC Health Department,People contact traced
+COVID-19 Quarantined,New York,2024-01-20,890,NYC Health Department,People in quarantine
