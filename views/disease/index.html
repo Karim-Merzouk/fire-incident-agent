@@ -1,4 +1,19 @@
 {{extend "layout.html"}}
 <div id='home'>
 {{=H2(module_name)}}
+
+<!-- Emergency AI Agent Quick Access -->
+<div class="alert alert-danger" style="margin: 20px 0; border: 2px solid #d32f2f;">
+    <h3><i class="fa fa-fire" style="color: #d32f2f;"></i> {{=T("Forest Fire Emergency AI Agent")}}</h3>
+    <p><strong>{{=T("NEW!")}} {{=T("Intelligent AI Assistant for Emergency Response")}}</strong></p>
+    <p>{{=T("Get immediate assistance for forest fire emergencies, resource planning, and incident coordination.")}}</p>
+    <div class="text-center">
+        <a href="{{=URL('fire', 'ai_agent')}}" class="btn btn-danger btn-lg" style="background-color: #d32f2f; border-color: #d32f2f; margin: 10px;">
+            <i class="fa fa-comments"></i> {{=T("Launch Fire Emergency AI Agent")}}
+        </a>
+        <a href="{{=URL('fire', 'index')}}" class="btn btn-warning btn-lg" style="margin: 10px;">
+            <i class="fa fa-fire-extinguisher"></i> {{=T("Fire Stations Module")}}
+        </a>
+    </div>
+</div>
 </div>

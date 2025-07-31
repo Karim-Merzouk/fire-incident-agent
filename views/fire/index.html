@@ -1,13 +1,266 @@
 {{extend "layout.html"}}
+
+<style>
+/* Modern Fire Module Homepage Styling */
+#home {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px 25px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+}
+
+/* Module Title Enhancement */
+h2 {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 700;
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+/* Description text */
+p {
+    color: #4a5568;
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+    text-align: center;
+    line-height: 1.6;
+}
+
+/* AI Agent Card Enhancement */
+.ai-agent-card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+    margin: 30px 0;
+    padding: 35px;
+    transition: all 0.3s ease;
+    border: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.ai-agent-card:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.05), transparent);
+    transition: left 0.8s;
+}
+
+.ai-agent-card:hover:before {
+    left: 100%;
+}
+
+.ai-agent-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 25px 60px rgba(0,0,0,0.2);
+}
+
+.ai-agent-card h4 {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 600;
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.ai-agent-card .fa-robot {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 2rem;
+}
+
+.ai-agent-card p {
+    color: #2d3748;
+    font-size: 1.1rem;
+    margin-bottom: 25px;
+    text-align: left;
+}
+
+/* Enhanced Buttons */
+.modern-btn {
+    padding: 15px 30px;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+    margin-right: 15px;
+    margin-bottom: 10px;
+    text-decoration: none;
+    display: inline-block;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.modern-btn:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+.modern-btn:hover:before {
+    left: 100%;
+}
+
+.btn-ai-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+}
+
+.btn-ai-primary:hover {
+    background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+    color: white;
+    text-decoration: none;
+}
+
+.btn-ai-secondary {
+    background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
+    color: white;
+    box-shadow: 0 6px 20px rgba(237, 137, 54, 0.3);
+}
+
+.btn-ai-secondary:hover {
+    background: linear-gradient(135deg, #dd6b20 0%, #c05621 100%);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 10px 30px rgba(237, 137, 54, 0.4);
+    color: white;
+    text-decoration: none;
+}
+
+.btn-actions {
+    text-align: center;
+    margin-top: 25px;
+}
+
+/* Station List Enhancement */
+.station-list {
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    margin: 25px 0;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.station-list:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.15);
+}
+
+.station-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.station-list li {
+    padding: 12px 0;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.station-list li:last-child {
+    border-bottom: none;
+}
+
+.station-list a {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    padding: 10px 15px;
+    border-radius: 8px;
+    display: block;
+}
+
+.station-list a:hover {
+    background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+    color: #5a67d8;
+    text-decoration: none;
+    transform: translateX(5px);
+}
+
+/* Incidents Section Enhancement */
+.incidents-section {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    margin: 25px 0;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.incidents-section:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.15);
+}
+
+/* Icon Enhancement */
+.fa {
+    transition: all 0.3s ease;
+}
+
+.modern-btn:hover .fa {
+    transform: scale(1.1);
+}
+</style>
+
 <div id='home'>
 {{=H2(module_name)}}
 <p>
 {{=T("The Fire Stations Module can be used to record information on Fire Stations.")}}
 </p>
+
+<!-- Enhanced AI Agent Quick Access -->
+<div class="ai-agent-card">
+    <h4><i class="fa fa-robot"></i> {{=T("Forest Fire Emergency AI Agent")}}</h4>
+    <p>{{=T("Get intelligent assistance for fire emergency response, resource planning, and incident analysis. Connect to multiple databases and leverage AI-powered emergency coordination.")}}</p>
+    <div class="btn-actions">
+        <a href="{{=URL('fire', 'ai_agent')}}" class="modern-btn btn-ai-primary">
+            <i class="fa fa-comments"></i> {{=T("Launch AI Assistant")}}
+        </a>
+        <a href="{{=URL('database_manager', 'database_manager')}}" class="modern-btn btn-ai-secondary">
+            <i class="fa fa-database"></i> {{=T("Database Manager")}}
+        </a>
+    </div>
+</div>
+
 {{if station_id:}}
-<ul>
-  <li><a href='{{=URL(f="station", args=[station_id])}}'>{{=station_name}}</a></li>
-</ul>
+<div class="station-list">
+    <h3 style="color: #4a5568; margin-bottom: 15px; font-weight: 600;">{{=T("Your Station")}}</h3>
+    <ul>
+        <li><a href='{{=URL(f="station", args=[station_id])}}'>{{=station_name}}</a></li>
+    </ul>
+</div>
 {{pass}}
-{{=incidents}}
+
+{{if incidents:}}
+<div class="incidents-section">
+    {{=incidents}}
+</div>
+{{pass}}
 </div>
