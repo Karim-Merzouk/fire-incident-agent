@@ -1,0 +1,556 @@
+{{extend 'layout.html'}}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h2><i class="fa fa-fire"></i> {{=T("Forest Fire Emergency AI Agent")}}</h2>
+            <p class="text-muted">{{=T("Intelligent emergency response assistant for forest fire incidents")}}</p>
+        </div>
+    </div>
+
+    {{if agent_initialized:}}
+    <div class="row">
+        <!-- Chat Interface -->
+        <div class="col-md-8">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h4><i class="fa fa-comments"></i> {{=T("Emergency AI Assistant")}}</h4>
+                </div>
+                <div class="panel-body">
+                    <div id="chat-container" style="height: 500px; overflow-y: auto; border: 1px solid #ddd; padding: 15px; background-color: #f9f9f9; margin-bottom: 15px;">
+                        <div class="alert alert-info">
+                            <strong><i class="fa fa-robot"></i> Forest Fire AI Agent:</strong><br>
+                            Hello! I'm your Forest Fire Emergency Response AI Assistant. I can help you with:
+                            <ul>
+                                <li>🔥 Fire incident analysis and response planning</li>
+                                <li>🚁 Resource deployment recommendations</li>
+                                <li>🏠 Evacuation planning and coordination</li>
+                                <li>📊 Real-time fire data analysis</li>
+                                <li>📋 Emergency protocols and procedures</li>
+                            </ul>
+                            How can I assist you today?
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <input type="text" id="user-input" class="form-control" placeholder="{{=T('Ask about fire emergency response...')}}" autocomplete="off">
+                        <span class="input-group-btn">
+                            <button id="send-btn" class="btn btn-primary" type="button">
+                                <i class="fa fa-paper-plane"></i> {{=T("Send")}}
+                            </button>
+                        </span>
+                    </div>
+                    
+                    <div id="loading" style="display: none; margin-top: 10px;">
+                        <div class="alert alert-warning">
+                            <i class="fa fa-spinner fa-spin"></i> {{=T("AI is thinking...")}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions & Status -->
+        <div class="col-md-4">
+            <div class="panel panel-warning">
+                <div class="panel-heading">
+                    <h4><i class="fa fa-bolt"></i> {{=T("Quick Actions")}}</h4>
+                </div>
+                <div class="panel-body">
+                    <div class="btn-group-vertical btn-block">
+                        <button class="btn btn-danger btn-sm quick-action" data-action="fire-report">
+                            <i class="fa fa-fire"></i> {{=T("Get Fire Status Report")}}
+                        </button>
+                        <button class="btn btn-warning btn-sm quick-action" data-action="evacuation">
+                            <i class="fa fa-home"></i> {{=T("Evacuation Planning")}}
+                        </button>
+                        <button class="btn btn-info btn-sm quick-action" data-action="resources">
+                            <i class="fa fa-truck"></i> {{=T("Available Resources")}}
+                        </button>
+                        <button class="btn btn-success btn-sm quick-action" data-action="weather">
+                            <i class="fa fa-cloud"></i> {{=T("Weather Conditions")}}
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h4><i class="fa fa-database"></i> {{=T("System Status")}}</h4>
+                </div>
+                <div class="panel-body">
+                    <div class="alert alert-success">
+                        <strong><i class="fa fa-check-circle"></i> {{=T("Connected")}}</strong><br>
+                        {{=T("AI Agent is online and ready")}}
+                    </div>
+                    <div id="incident-count">
+                        <strong>{{=T("Loading incidents...")}} <i class="fa fa-spinner fa-spin"></i></strong>
+                    </div>
+                    <div style="margin-top: 15px;">
+                        <a href="{{=URL('database_manager', 'database_manager')}}" class="btn btn-primary btn-sm">
+                            <i class="fa fa-database"></i> {{=T("Database Manager")}}
+                        </a>
+                        <a href="{{=URL('fire', 'index')}}" class="btn btn-default btn-sm">
+                            <i class="fa fa-arrow-left"></i> {{=T("Back to Fire Module")}}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{else:}}
+    <!-- Error State -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-danger">
+                <h4><i class="fa fa-exclamation-triangle"></i> {{=T("AI Agent Not Available")}}</h4>
+                <p>{{=error if 'error' in locals() else T("The Forest Fire AI Agent could not be initialized.")}}</p>
+                <hr>
+                <p><strong>{{=T("Setup Instructions:")}}:</strong></p>
+                <ol>
+                    <li>{{=T("Ensure all AI agent files are in the private directory")}}</li>
+                    <li>{{=T("Install required Python packages: google-generativeai, agno")}}</li>
+                    <li>{{=T("Configure your .env file with GEMINI_API_KEY")}}</li>
+                    <li>{{=T("Restart the Sahana Eden application")}}</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    {{pass}}
+</div>
+
+<style>
+/* Modern Professional UI Styling */
+.chat-message {
+    margin-bottom: 20px;
+    padding: 20px 25px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.chat-message:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.user-message {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    margin-left: 30px;
+    border: none;
+}
+
+.ai-message {
+    background: linear-gradient(135deg, #e6f3ff 0%, #b3e5fc 100%);
+    color: #1a365d;
+    margin-right: 30px;
+    border: none;
+    border-left: 4px solid #3182ce;
+}
+
+.emergency-message {
+    background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+    color: #333;
+    border: 2px solid #ff9500;
+}
+
+.quick-action {
+    margin-bottom: 12px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    border: none;
+    font-weight: 500;
+    padding: 12px 20px;
+}
+
+.quick-action:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+#chat-container {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    border-radius: 12px;
+    padding: 25px;
+}
+
+/* Modern Professional Colors */
+.panel-primary > .panel-heading {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 8px 8px 0 0;
+    padding: 20px 25px;
+}
+
+.panel-body {
+    padding: 25px;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    padding: 12px 24px;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+/* Enhanced Send Button */
+#send-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 25px;
+    padding: 15px 30px;
+    font-weight: 600;
+    font-size: 14px;
+    color: white;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+#send-btn:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+#send-btn:hover:before {
+    left: 100%;
+}
+
+#send-btn:hover {
+    background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+}
+
+#send-btn:active {
+    transform: translateY(-1px) scale(1.02);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+#send-btn:disabled {
+    background: linear-gradient(135deg, #a0aec0 0%, #718096 100%);
+    transform: none;
+    box-shadow: none;
+    cursor: not-allowed;
+}
+
+/* Input Field Enhancement */
+#user-input {
+    border-radius: 25px;
+    border: 2px solid #e2e8f0;
+    padding: 15px 25px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+#user-input:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 20px rgba(102, 126, 234, 0.2);
+    outline: none;
+}
+
+/* Input Group Enhancement */
+.input-group {
+    border-radius: 25px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    margin-top: 20px;
+}
+
+.input-group-btn .btn {
+    border-radius: 0 25px 25px 0;
+}
+
+/* Panel Enhancements */
+.panel {
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    margin-bottom: 25px;
+}
+
+.panel:hover {
+    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+}
+
+.panel-heading {
+    border-radius: 12px 12px 0 0;
+}
+
+/* Button Variations */
+.btn-warning {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    border: none;
+    color: white;
+    padding: 12px 20px;
+}
+
+.btn-info {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    border: none;
+    color: white;
+    padding: 12px 20px;
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    border: none;
+    color: white;
+    padding: 12px 20px;
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    border: none;
+    color: white;
+    padding: 12px 20px;
+}
+
+.btn-sm {
+    padding: 10px 18px;
+    font-size: 13px;
+}
+
+/* Loading Animation Enhancement */
+#loading {
+    background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+    border-radius: 12px;
+    border: none;
+    color: #333;
+    padding: 20px;
+    margin-top: 15px;
+}
+
+/* Alert Enhancements */
+.alert {
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    padding: 20px 25px;
+    margin-bottom: 20px;
+}
+
+.alert-info {
+    background: linear-gradient(135deg, #e0f2fe 0%, #b3e5fc 100%);
+    color: #01579b;
+}
+
+.alert-success {
+    background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%);
+    color: #1b5e20;
+}
+
+.alert-warning {
+    background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%);
+    color: #e65100;
+}
+
+/* Container spacing */
+.container-fluid {
+    padding: 25px 30px;
+}
+
+.row {
+    margin-bottom: 25px;
+}
+
+/* Additional spacing for specific elements */
+h2 {
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+}
+
+.text-muted {
+    margin-bottom: 25px;
+}
+</style>
+
+<script>
+$(document).ready(function() {
+    // Chat functionality
+    function sendMessage() {
+        var message = $('#user-input').val().trim();
+        if (message === '') return;
+        
+        // Add user message to chat
+        addMessage(message, 'user');
+        $('#user-input').val('');
+        
+        // Show loading
+        $('#loading').show();
+        $('#send-btn').prop('disabled', true);
+        
+        // Send to AI agent
+        $.ajax({
+            url: '{{=URL("fire", "chat.json")}}',
+            type: 'POST',
+            data: {message: message},
+            dataType: 'json',
+            success: function(data) {
+                $('#loading').hide();
+                $('#send-btn').prop('disabled', false);
+                
+                if (data.status === 'success') {
+                    addMessage(data.response, 'ai');
+                    
+                    // Show agent mode status
+                    if (data.agent_mode) {
+                        if (data.agent_mode === 'google_ai') {
+                            updateSystemStatus('✅ Google Gemini AI Active', 'success');
+                        } else if (data.agent_mode === 'gemini_direct_api') {
+                            updateSystemStatus('✅ Gemini Direct API Active', 'success');
+                        } else if (data.agent_mode === 'agno') {
+                            updateSystemStatus('✅ Agno Gemini Active', 'success');
+                        } else if (data.agent_mode === 'fallback') {
+                            updateSystemStatus('⚠️ Enhanced Fallback Mode', 'warning');
+                        }
+                    }
+                } else {
+                    addMessage('Error: ' + data.message, 'error');
+                    updateSystemStatus('❌ Connection Error', 'danger');
+                }
+            },
+            error: function(xhr, status, error) {
+                $('#loading').hide();
+                $('#send-btn').prop('disabled', false);
+                
+                // Try to get detailed error information
+                var errorMessage = 'Connection error. ';
+                
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    errorMessage += 'Server error: ' + xhr.responseJSON.message;
+                } else if (xhr.responseText) {
+                    try {
+                        var response = JSON.parse(xhr.responseText);
+                        if (response.message) {
+                            errorMessage += 'Server error: ' + response.message;
+                        } else {
+                            errorMessage += 'Response: ' + xhr.responseText.substring(0, 200);
+                        }
+                    } catch (e) {
+                        errorMessage += 'Raw response: ' + xhr.responseText.substring(0, 200);
+                    }
+                } else {
+                    errorMessage += 'Status: ' + status + ', Error: ' + error + ', HTTP Code: ' + xhr.status;
+                }
+                
+                addMessage(errorMessage, 'error');
+            }
+        });
+    }
+    
+    function addMessage(text, type) {
+        var messageClass = type === 'user' ? 'user-message' : 
+                          type === 'ai' ? 'ai-message' : 'emergency-message';
+        var icon = type === 'user' ? 'fa-user' : 
+                  type === 'ai' ? 'fa-robot' : 'fa-exclamation-triangle';
+        var sender = type === 'user' ? '{{=T("You")}}' : 
+                    type === 'ai' ? '{{=T("AI Agent")}}' : '{{=T("System")}}';
+        
+        var messageHtml = 
+            '<div class="chat-message ' + messageClass + '">' +
+                '<strong><i class="fa ' + icon + '"></i> ' + sender + ':</strong><br>' +
+                parseMarkdown(text) +
+            '</div>';
+        
+        $('#chat-container').append(messageHtml);
+        $('#chat-container').scrollTop($('#chat-container')[0].scrollHeight);
+    }
+    
+    function updateSystemStatus(message, type) {
+        var alertClass = 'alert-' + type;
+        var iconClass = type === 'success' ? 'fa-check-circle' : 
+                       type === 'warning' ? 'fa-exclamation-triangle' : 'fa-times-circle';
+        
+        var statusHtml = '<div class="alert ' + alertClass + '">' +
+                        '<strong><i class="fa ' + iconClass + '"></i> ' + message + '</strong>' +
+                        '</div>';
+        
+        $('.panel-info .panel-body .alert').replaceWith(statusHtml);
+    }
+    
+    function parseMarkdown(text) {
+        return text
+            .replace(/^## (.*$)/gim, '<h4 style="color: #d32f2f; margin-bottom: 10px;">$1</h4>')
+            .replace(/^### (.*$)/gim, '<h5 style="color: #ff6b35; margin-bottom: 8px;">$1</h5>')
+            .replace(/\*\*(.*?)\*\*/g, '<strong style="color: #d32f2f;">$1</strong>')
+            .replace(/\*(.*?)\*/g, '<em style="color: #ff9800;">$1</em>')
+            .replace(/`(.*?)`/g, '<code style="background: #f5f5f5; padding: 2px 4px; border-radius: 3px;">$1</code>')
+            .replace(/^\* (.*)$/gim, '<li style="margin-left: 20px;">$1</li>')
+            .replace(/\n/g, '<br>');
+    }
+    
+    // Event handlers
+    $('#send-btn').click(sendMessage);
+    $('#user-input').keypress(function(e) {
+        if (e.which === 13) sendMessage();
+    });
+    
+    // Quick actions
+    $('.quick-action').click(function() {
+        var action = $(this).data('action');
+        var message = '';
+        
+        switch(action) {
+            case 'fire-report':
+                message = 'Give me a current fire status report with all active incidents';
+                break;
+            case 'evacuation':
+                message = 'Show me evacuation planning recommendations for current fire threats';
+                break;
+            case 'resources':
+                message = 'What fire suppression resources are currently available?';
+                break;
+            case 'weather':
+                message = 'Provide current weather conditions affecting fire behavior';
+                break;
+        }
+        
+        $('#user-input').val(message);
+        sendMessage();
+    });
+    
+    // Load incident count
+    $.ajax({
+        url: '{{=URL("fire", "ai_agent.json")}}',
+        type: 'POST',
+        data: {action: 'get_incidents'},
+        dataType: 'json',
+        success: function(data) {
+            if (data.status === 'success') {
+                var count = data.incidents ? data.incidents.length : 0;
+                $('#incident-count').html(
+                    '<strong><i class="fa fa-fire"></i> ' + count + 
+                    ' {{=T("Active Fire Incidents")}}</strong>'
+                );
+            }
+        }
+    });
+});
+</script>

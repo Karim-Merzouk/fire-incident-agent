@@ -1,0 +1,708 @@
+{{extend 'layout.html'}}
+
+<style>
+.database-manager {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px 25px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+}
+
+.card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+    margin-bottom: 30px;
+    padding: 30px;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.18);
+}
+
+.card-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 25px 30px;
+    border-radius: 15px 15px 0 0;
+    margin: -30px -30px 30px -30px;
+    font-size: 18px;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: #4a5568;
+    font-size: 14px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 15px 20px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.form-control:focus {
+    border-color: #667eea;
+    outline: none;
+    box-shadow: 0 0 20px rgba(102, 126, 234, 0.2);
+    transform: translateY(-2px);
+}
+
+.btn {
+    padding: 15px 30px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    margin-right: 15px;
+    margin-bottom: 15px;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+.btn:hover:before {
+    left: 100%;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
+}
+
+.btn-success:hover {
+    background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(72, 187, 120, 0.4);
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(237, 137, 54, 0.3);
+}
+
+.btn-warning:hover {
+    background: linear-gradient(135deg, #dd6b20 0%, #c05621 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(237, 137, 54, 0.4);
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(245, 101, 101, 0.3);
+}
+
+.btn-danger:hover {
+    background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(245, 101, 101, 0.4);
+}
+
+.alert {
+    padding: 22px 25px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    border: none;
+    font-weight: 500;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.alert-success {
+    background: linear-gradient(135deg, #e6fffa 0%, #b2f5ea 100%);
+    color: #234e52;
+}
+
+.alert-danger {
+    background: linear-gradient(135deg, #fed7d7 0%, #feb2b2 100%);
+    color: #822727;
+}
+
+.alert-info {
+    background: linear-gradient(135deg, #e6f3ff 0%, #bee3f8 100%);
+    color: #2a4365;
+}
+
+.row {
+    display: flex;
+    margin: -20px;
+}
+
+.col-md-6 {
+    flex: 1;
+    padding: 20px;
+}
+
+.db-config-item {
+    background: linear-gradient(135deg, #ffffff 0%, #f7fafc 100%);
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.db-config-item:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+    transition: left 0.5s;
+}
+
+.db-config-item:hover:before {
+    left: 100%;
+}
+
+.db-config-item:hover {
+    background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+    border-color: #667eea;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+}
+
+.db-config-item.active {
+    background: linear-gradient(135deg, #e6f3ff 0%, #bee3f8 100%);
+    border-color: #667eea;
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+}
+
+.db-info {
+    background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+    border-radius: 12px;
+    padding: 25px;
+    margin-top: 20px;
+    border: 2px solid #e2e8f0;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+.loading {
+    display: none;
+    text-align: center;
+    padding: 35px;
+    background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%);
+    border-radius: 12px;
+    color: #e65100;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.hidden {
+    display: none;
+}
+
+#db-specific-fields {
+    margin-top: 25px;
+}
+
+/* Page Title Enhancement */
+h1 {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 700;
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+}
+
+.lead {
+    color: #4a5568;
+    font-size: 1.1rem;
+    margin-bottom: 35px;
+    padding-bottom: 10px;
+}
+
+/* Select Enhancement */
+select.form-control {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 15px center;
+    background-repeat: no-repeat;
+    background-size: 16px 12px;
+    padding-right: 45px;
+    appearance: none;
+}
+
+/* Small text enhancement */
+.text-muted {
+    color: #718096;
+    font-size: 12px;
+    margin-top: 8px;
+    padding-top: 5px;
+}
+
+/* Status text colors */
+.text-danger {
+    color: #e53e3e;
+}
+
+.text-success {
+    color: #38a169;
+}
+
+.text-info {
+    color: #3182ce;
+}
+
+/* Additional spacing for specific elements */
+h5, h6 {
+    margin-bottom: 12px;
+    padding-bottom: 5px;
+}
+
+small {
+    margin-top: 8px;
+    display: block;
+    padding-top: 3px;
+}
+</style>
+
+<div class="database-manager">
+    <h1>🗄️ Database Connection Manager</h1>
+    <p class="lead">Connect and manage databases for the Forest Fire AI Agent</p>
+
+    <!-- Status Alert -->
+    <div id="status-alert" class="alert hidden">
+        <span id="status-message"></span>
+    </div>
+
+    <div class="row">
+        <!-- Database Configuration Panel -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    ⚙️ Database Configuration
+                </div>
+
+                <form id="database-form">
+                    <div class="form-group">
+                        <label for="config-name">Configuration Name</label>
+                        <input type="text" id="config-name" name="config_name" class="form-control" 
+                               placeholder="e.g., sahana-main, backup-db, external-db" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <input type="text" id="description" name="description" class="form-control" 
+                               placeholder="Brief description of this database">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="db-type">Database Type</label>
+                        <select id="db-type" name="db_type" class="form-control" required>
+                            <option value="sqlite">SQLite (Local File)</option>
+                            <option value="mysql">MySQL</option>
+                            <option value="postgresql">PostgreSQL</option>
+                        </select>
+                    </div>
+
+                    <!-- SQLite specific fields -->
+                    <div id="sqlite-fields" class="db-specific-fields">
+                        <div class="form-group">
+                            <label for="db-path">Database File Path</label>
+                            <input type="text" id="db-path" name="db_path" class="form-control" 
+                                   placeholder="C:\path\to\database.db">
+                            <small class="text-muted">
+                                Current Sahana Eden DB: C:\Users\PC\OneDrive\Bureau\CERIST\web2py\applications\eden\databases\storage.db
+                            </small>
+                        </div>
+                    </div>
+
+                    <!-- MySQL/PostgreSQL specific fields -->
+                    <div id="server-fields" class="db-specific-fields hidden">
+                        <div class="form-group">
+                            <label for="db-host">Host</label>
+                            <input type="text" id="db-host" name="db_host" class="form-control" 
+                                   placeholder="localhost or IP address">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="db-port">Port</label>
+                            <input type="number" id="db-port" name="db_port" class="form-control" 
+                                   placeholder="3306 for MySQL, 5432 for PostgreSQL">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="db-name">Database Name</label>
+                            <input type="text" id="db-name" name="db_name" class="form-control" 
+                                   placeholder="Database name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="db-user">Username</label>
+                            <input type="text" id="db-user" name="db_user" class="form-control" 
+                                   placeholder="Database username">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="db-password">Password</label>
+                            <input type="password" id="db-password" name="db_password" class="form-control" 
+                                   placeholder="Database password">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="button" id="test-connection" class="btn btn-primary">
+                            🔍 Test Connection
+                        </button>
+                        <button type="button" id="save-config" class="btn btn-success">
+                            💾 Save Configuration
+                        </button>
+                    </div>
+                </form>
+
+                <div id="connection-test-result" class="db-info hidden">
+                    <h5>Connection Test Result</h5>
+                    <div id="test-result-content"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Saved Configurations Panel -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    📚 Saved Configurations
+                </div>
+
+                <div class="form-group">
+                    <button type="button" id="refresh-configs" class="btn btn-primary">
+                        🔄 Refresh List
+                    </button>
+                </div>
+
+                <div id="saved-configs">
+                    <div class="loading">
+                        <p>Loading configurations...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Current AI Agent Status -->
+            <div class="card">
+                <div class="card-header">
+                    🤖 AI Agent Status
+                </div>
+
+                <div id="agent-status">
+                    <p><strong>Current Database:</strong> <span id="current-database">Loading...</span></p>
+                    <p><strong>AI Mode:</strong> <span id="ai-mode">Loading...</span></p>
+                    <p><strong>Connection Status:</strong> <span id="connection-status">Loading...</span></p>
+                </div>
+
+                <div class="form-group">
+                    <button type="button" id="refresh-agent-status" class="btn btn-primary">
+                        🔄 Refresh Status
+                    </button>
+                    <a href="/eden/fire/ai_agent" class="btn btn-success" target="_blank">
+                        💬 Test AI Chat
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    // Show/hide database specific fields
+    $('#db-type').change(function() {
+        const dbType = $(this).val();
+        $('.db-specific-fields').addClass('hidden');
+        
+        if (dbType === 'sqlite') {
+            $('#sqlite-fields').removeClass('hidden');
+        } else {
+            $('#server-fields').removeClass('hidden');
+        }
+    });
+
+    // Test database connection
+    $('#test-connection').click(function() {
+        const formData = $('#database-form').serialize();
+        
+        showStatus('Testing connection...', 'info');
+        $('#connection-test-result').addClass('hidden');
+        
+        $.ajax({
+            url: '/eden/database_manager/test_database_connection',
+            method: 'POST',
+            data: formData,
+            dataType: 'json',
+            success: function(data) {
+                if (data.status === 'success') {
+                    showStatus(data.message, 'success');
+                    displayConnectionResult(data.database_info);
+                } else {
+                    showStatus(data.message, 'danger');
+                }
+            },
+            error: function(xhr, status, error) {
+                showStatus('Connection test failed: ' + error, 'danger');
+            }
+        });
+    });
+
+    // Save configuration
+    $('#save-config').click(function() {
+        const formData = $('#database-form').serialize();
+        
+        if (!$('#config-name').val().trim()) {
+            showStatus('Please enter a configuration name', 'danger');
+            return;
+        }
+        
+        showStatus('Saving configuration...', 'info');
+        
+        $.ajax({
+            url: '/eden/database_manager/save_database_config',
+            method: 'POST',
+            data: formData,
+            dataType: 'json',
+            success: function(data) {
+                if (data.status === 'success') {
+                    showStatus(data.message, 'success');
+                    loadSavedConfigs();
+                } else {
+                    showStatus(data.message, 'danger');
+                }
+            },
+            error: function(xhr, status, error) {
+                showStatus('Failed to save configuration: ' + error, 'danger');
+            }
+        });
+    });
+
+    // Load saved configurations
+    $('#refresh-configs').click(function() {
+        loadSavedConfigs();
+    });
+
+    // Refresh AI agent status
+    $('#refresh-agent-status').click(function() {
+        loadAgentStatus();
+    });
+
+    // Apply configuration
+    $(document).on('click', '.apply-config', function() {
+        const configName = $(this).data('config');
+        
+        if (confirm('Apply this database configuration to the AI Agent?')) {
+            showStatus('Applying configuration...', 'info');
+            
+            $.ajax({
+                url: '/eden/database_manager/apply_database_config',
+                method: 'POST',
+                data: { config_name: configName },
+                dataType: 'json',
+                success: function(data) {
+                    if (data.status === 'success') {
+                        showStatus(data.message, 'success');
+                        loadAgentStatus();
+                    } else {
+                        showStatus(data.message, 'danger');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    showStatus('Failed to apply configuration: ' + error, 'danger');
+                }
+            });
+        }
+    });
+
+    // Load configuration into form
+    $(document).on('click', '.load-config', function() {
+        const configName = $(this).data('config');
+        loadConfigIntoForm(configName);
+    });
+
+    // Initialize
+    loadSavedConfigs();
+    loadAgentStatus();
+
+    function showStatus(message, type) {
+        $('#status-message').text(message);
+        $('#status-alert').removeClass('hidden alert-success alert-danger alert-info')
+                          .addClass('alert-' + type);
+    }
+
+    function displayConnectionResult(info) {
+        let html = '<ul>';
+        html += '<li><strong>Type:</strong> ' + info.type + '</li>';
+        
+        if (info.path) {
+            html += '<li><strong>Path:</strong> ' + info.path + '</li>';
+        }
+        if (info.host) {
+            html += '<li><strong>Host:</strong> ' + info.host + '</li>';
+        }
+        if (info.database) {
+            html += '<li><strong>Database:</strong> ' + info.database + '</li>';
+        }
+        
+        html += '<li><strong>Tables Found:</strong> ' + info.tables_found + '</li>';
+        
+        if (info.table_list && info.table_list.length > 0) {
+            html += '<li><strong>Tables:</strong> ' + info.table_list.slice(0, 10).join(', ');
+            if (info.table_list.length > 10) {
+                html += ' (and ' + (info.table_list.length - 10) + ' more)';
+            }
+            html += '</li>';
+        }
+        
+        if (info.sample_counts) {
+            html += '<li><strong>Sample Counts:</strong><ul>';
+            for (const [table, count] of Object.entries(info.sample_counts)) {
+                html += '<li>' + table + ': ' + count + '</li>';
+            }
+            html += '</ul></li>';
+        }
+        
+        html += '</ul>';
+        
+        $('#test-result-content').html(html);
+        $('#connection-test-result').removeClass('hidden');
+    }
+
+    function loadSavedConfigs() {
+        $.ajax({
+            url: '/eden/database_manager/load_database_configs',
+            method: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                if (data.status === 'success') {
+                    displaySavedConfigs(data.configs);
+                } else {
+                    $('#saved-configs').html('<p class="text-danger">Failed to load configurations</p>');
+                }
+            },
+            error: function() {
+                $('#saved-configs').html('<p class="text-danger">Error loading configurations</p>');
+            }
+        });
+    }
+
+    function displaySavedConfigs(configs) {
+        let html = '';
+        
+        if (Object.keys(configs).length === 0) {
+            html = '<p class="text-muted">No saved configurations found</p>';
+        } else {
+            for (const [name, config] of Object.entries(configs)) {
+                html += '<div class="db-config-item">';
+                html += '<h6>' + name + '</h6>';
+                html += '<p class="text-muted">' + (config.description || 'No description') + '</p>';
+                html += '<small><strong>Type:</strong> ' + config.db_type.toUpperCase() + '</small><br>';
+                
+                if (config.db_type === 'sqlite') {
+                    html += '<small><strong>Path:</strong> ' + config.db_path + '</small>';
+                } else {
+                    html += '<small><strong>Host:</strong> ' + config.db_host + ':' + config.db_port + '</small>';
+                }
+                
+                html += '<div style="margin-top: 10px;">';
+                html += '<button class="btn btn-warning apply-config" data-config="' + name + '">🔗 Apply</button>';
+                html += '<button class="btn btn-primary load-config" data-config="' + name + '">📝 Edit</button>';
+                html += '</div>';
+                html += '</div>';
+            }
+        }
+        
+        $('#saved-configs').html(html);
+    }
+
+    function loadAgentStatus() {
+        // Load AI agent status from the chat endpoint
+        $.ajax({
+            url: '/eden/fire/chat',
+            method: 'POST',
+            data: { message: 'status check' },
+            dataType: 'json',
+            success: function(data) {
+                $('#ai-mode').text(data.agent_mode || 'Unknown');
+                $('#connection-status').text(data.status === 'success' ? 'Connected' : 'Error');
+                $('#current-database').text('Sahana Eden (Default)');
+            },
+            error: function() {
+                $('#ai-mode').text('Error');
+                $('#connection-status').text('Failed');
+                $('#current-database').text('Unknown');
+            }
+        });
+    }
+
+    function loadConfigIntoForm(configName) {
+        $.ajax({
+            url: '/eden/database_manager/load_database_configs',
+            method: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                if (data.status === 'success' && data.configs[configName]) {
+                    const config = data.configs[configName];
+                    
+                    $('#config-name').val(config.config_name);
+                    $('#description').val(config.description);
+                    $('#db-type').val(config.db_type).trigger('change');
+                    $('#db-path').val(config.db_path);
+                    $('#db-host').val(config.db_host);
+                    $('#db-port').val(config.db_port);
+                    $('#db-name').val(config.db_name);
+                    $('#db-user').val(config.db_user);
+                    $('#db-password').val(config.db_password);
+                    
+                    showStatus('Configuration loaded: ' + configName, 'info');
+                }
+            }
+        });
+    }
+});
+</script>

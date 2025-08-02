@@ -1,0 +1,10 @@
+# Sahana Eden COVID-19 Database Agent
+# Requirements for the Agno framework integration
+
+agno==0.1.37
+phidata
+sqlite3
+pandas
+python-dotenv
+google-generativeai
+openai
